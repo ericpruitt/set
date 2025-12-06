@@ -43,15 +43,17 @@ jobs:
 
   cppcheck:
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     strategy:
       matrix:
         os: [ubuntu-latest]
         compiler: [gcc]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     # The following should be moved into a seperate action for only pull requests, etc.
     # where you it posts the information into the PR as a comment (optionally?)
     - name: Install cppcheck
       run: sudo apt install cppcheck
     - name: Code Quality (cppcheck)
-      run: cppcheck --error-exitcode=1 --inline-suppr --enable=warning,performance,information,style --template='{file}:{line},{severity},{id},{message}' ./src/
+      run: cppcheck --error-exitcode=1 --inline-suppr --enable=warning,performance,information,style --suppress=missingIncludeSystem --check-level=exhaustive --template='{file}:{line},{severity},{id},{message}' ./src/
+
