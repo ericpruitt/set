@@ -47,6 +47,21 @@ typedef struct  {
     set_hash_function hash_function;
 } SimpleSet, simple_set;
 
+typedef enum {
+    SET_TRUE = -1,
+    SET_FALSE = -2,
+    SET_MALLOC_ERROR = -3,
+    SET_CIRCULAR_ERROR = -4,
+    SET_OCCUPIED_ERROR = -5,
+    SET_ALREADY_PRESENT = -6,
+} set_result;
+
+typedef enum {
+    SET_RIGHT_GREATER = 3,
+    SET_LEFT_GREATER = 1,
+    SET_EQUAL = 0,
+    SET_UNEQUAL = 2,
+} set_cmp_result;
 
 
 /*  Initialize the set either with default parameters (hash function and space)
@@ -62,10 +77,10 @@ static __inline__ int set_init(SimpleSet *set) {
 }
 
 /* Utility function to clear out the set */
-int set_clear(SimpleSet *set);
+void set_clear(SimpleSet *set);
 
 /* Free all memory that is part of the set */
-int set_destroy(SimpleSet *set);
+void set_destroy(SimpleSet *set);
 
 /*  Add element to set
 
@@ -220,22 +235,9 @@ char** set_to_array(const SimpleSet *set, uint64_t *size);
         SET_EQUAL if left is the same size as right and keys match
         SET_UNEQUAL if size is the same but elements are different
 */
-int set_cmp(const SimpleSet *left, const SimpleSet *right);
+set_cmp_result set_cmp(const SimpleSet *left, const SimpleSet *right);
 
 // void set_printf(SimpleSet *set);                                           /* TODO: implement */
-
-#define SET_TRUE 0
-#define SET_FALSE -1
-#define SET_MALLOC_ERROR -2
-#define SET_CIRCULAR_ERROR -3
-#define SET_OCCUPIED_ERROR -4
-#define SET_ALREADY_PRESENT 1
-
-#define SET_RIGHT_GREATER 3
-#define SET_LEFT_GREATER 1
-#define SET_EQUAL 0
-#define SET_UNEQUAL 2
-
 
 #ifdef __cplusplus
 } // extern "C"
